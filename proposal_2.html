@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>잼테니스 × 프로스포츠 — 사업 제안서</title>
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --cream: #f5f0e8;
+    --accent: #c8a96e;
+    --accent2: #2a5c45;
+    --light-green: #eaf2ec;
+    --border: #d4cdc0;
+    --muted: #7a7265;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    color: var(--ink);
+    font-family: 'Noto Sans CJK KR', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* A4 = 210mm × 297mm at 96dpi ≈ 794px × 1123px */
+  /* wkhtmltopdf renders at 96dpi by default */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  /* ==============================
+     COVER
+  ============================== */
+  .cover {
+    flex: 1;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 68px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: 'TENNIS';
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(200,169,110,0.055);
+    letter-spacing: 8px;
+    white-space: nowrap;
+  }
+
+  .cover-accent-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: var(--accent);
+  }
+
+  .c-eyebrow {
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 22px;
+  }
+
+  .c-title {
+    font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.0;
+    margin-bottom: 8px;
+  }
+
+  .c-title em { color: var(--accent); font-style: normal; }
+
+  .c-subtitle {
+    font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 44px;
+    letter-spacing: 1px;
+  }
+
+  .c-line {
+    width: 52px; height: 2px;
+    background: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .c-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.38);
+    max-width: 400px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  .c-badge {
+    position: absolute;
+    bottom: 48px; right: 68px;
+    display: flex; flex-direction: column;
+    align-items: flex-end; gap: 7px;
+  }
+
+  .c-badge-label {
+    font-size: 9px; letter-spacing: 3px;
+    color: rgba(255,255,255,0.2); font-weight: 700;
+  }
+
+  .c-pills { display: flex; gap: 12px; }
+
+  .c-pill {
+    padding: 6px 14px;
+    border: 1px solid rgba(200,169,110,0.35);
+    font-size: 10px; color: var(--accent);
+    letter-spacing: 2px; font-weight: 600;
+  }
+
+  /* ==============================
+     CONTENT PAGES
+  ============================== */
+  .cp {
+    flex: 1;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    padding: 32px 52px 28px;
+  }
+
+  /* topbar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 22px;
+    flex-shrink: 0;
+  }
+
+  .tb-brand {
+    font-size: 9px; letter-spacing: 4px;
+    color: var(--muted); font-weight: 700;
+  }
+
+  .tb-num {
+    font-size: 10px; color: var(--accent);
+    font-weight: 700; letter-spacing: 2px;
+  }
+
+  /* section heading */
+  .sh {
+    display: flex; gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  .sh-num {
+    font-size: 48px; font-weight: 900;
+    color: var(--accent); line-height: 1;
+    opacity: 0.35; flex-shrink: 0;
+    margin-top: -2px;
+  }
+
+  .sh-tag {
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 3.5px; color: var(--accent2);
+    margin-bottom: 4px;
+  }
+
+  .sh-title {
+    font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+    font-size: 24px; font-weight: 700;
+    color: var(--ink); line-height: 1.15;
+    margin-bottom: 3px;
+  }
+
+  .sh-sub {
+    font-size: 11px; color: var(--muted); font-weight: 300;
+  }
+
+  /* 3-col cards */
+  .row3 {
+    display: flex; gap: 10px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .c3 {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    padding: 14px 16px;
+  }
+
+  .c3-head {
+    display: flex; align-items: center;
+    gap: 7px; margin-bottom: 7px;
+  }
+
+  .c3-ico { font-size: 14px; flex-shrink: 0; }
+
+  .c3-ttl {
+    font-size: 12.5px; font-weight: 700;
+    color: var(--ink); flex: 1;
+    line-height: 1.3;
+  }
+
+  .badge {
+    font-size: 7.5px; font-weight: 700;
+    letter-spacing: 1px; padding: 2px 5px;
+    background: var(--accent); color: #fff;
+    flex-shrink: 0;
+  }
+
+  .c3-body {
+    font-size: 11px; color: #444;
+    line-height: 1.75; font-weight: 300;
+  }
+
+  /* lifecycle card */
+  .lc-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .lc-head {
+    display: flex; align-items: center;
+    gap: 7px; margin-bottom: 8px;
+  }
+
+  .lc-ttl { font-size: 12.5px; font-weight: 700; }
+
+  .lc-intro {
+    font-size: 11px; color: #444;
+    font-weight: 300; margin-bottom: 10px;
+    line-height: 1.65;
+  }
+
+  .lc-row { display: flex; gap: 10px; }
+
+  .lc-item {
+    flex: 1;
+    background: var(--light-green);
+    border: 1px solid #c3ddc9;
+    padding: 12px 14px;
+  }
+
+  .lc-label {
+    font-size: 8px; font-weight: 700;
+    letter-spacing: 3px; color: var(--accent2);
+    margin-bottom: 4px;
+  }
+
+  .lc-item-ttl {
+    font-size: 12px; font-weight: 700;
+    color: var(--ink); margin-bottom: 5px;
+  }
+
+  .lc-desc {
+    font-size: 11px; color: #4a6b52;
+    line-height: 1.7; font-weight: 300;
+  }
+
+  /* match card full width */
+  .card-full {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 13px 16px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .cf-head {
+    display: flex; align-items: center;
+    gap: 7px; margin-bottom: 6px;
+  }
+
+  .cf-ttl { font-size: 12.5px; font-weight: 700; }
+  .cf-body { font-size: 11px; color: #444; line-height: 1.7; font-weight: 300; }
+
+  /* ===== PAGE 2 specific ===== */
+  .vs-block {
+    background: var(--ink);
+    padding: 22px 28px;
+    margin-bottom: 12px;
+    display: flex; gap: 28px; align-items: center;
+    flex-shrink: 0;
+  }
+
+  .vs-center {
+    flex-shrink: 0; text-align: center;
+  }
+
+  .vs-label {
+    font-size: 9px; letter-spacing: 3px;
+    color: rgba(255,255,255,0.25); font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .vs-text {
+    font-size: 32px; font-weight: 900;
+    color: var(--accent); opacity: 0.55; line-height: 1;
+  }
+
+  .vs-col { flex: 1; }
+
+  .vs-col-label {
+    font-size: 9px; letter-spacing: 2px; font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .vs-col-body {
+    font-size: 12px; line-height: 1.65; font-weight: 300;
+  }
+
+  .summary-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    padding: 14px 18px;
+    flex-shrink: 0;
+  }
+
+  .summary-tag {
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 3px; color: var(--accent2);
+    margin-bottom: 6px;
+  }
+
+  .summary-body {
+    font-size: 11.5px; color: #444;
+    line-height: 1.8; font-weight: 300;
+  }
+
+  /* ===== PAGE 3 specific ===== */
+  .xlabel {
+    font-size: 8.5px; font-weight: 700;
+    letter-spacing: 3.5px; color: var(--muted);
+    margin-bottom: 9px; flex-shrink: 0;
+  }
+
+  .row2 {
+    display: flex; gap: 10px;
+    margin-bottom: 12px; flex-shrink: 0;
+  }
+
+  .sc {
+    flex: 1;
+    background: var(--ink);
+    color: #fff;
+    padding: 18px 20px;
+    position: relative; overflow: hidden;
+  }
+
+  .sc::after {
+    content: '';
+    position: absolute; right: -14px; bottom: -14px;
+    width: 56px; height: 56px;
+    border: 1.5px solid rgba(200,169,110,0.12);
+    border-radius: 50%;
+  }
+
+  .sc-arrow { font-size: 16px; color: var(--accent); margin-bottom: 8px; }
+  .sc-from { font-size: 10.5px; color: rgba(255,255,255,0.38); font-weight: 300; margin-bottom: 4px; }
+  .sc-to { font-size: 11.5px; color: var(--accent); font-weight: 500; line-height: 1.6; }
+  .sc-note { font-size: 9.5px; color: rgba(255,255,255,0.28); margin-top: 4px; }
+
+  .mc-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 16px 22px;
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 12px; flex-shrink: 0;
+  }
+
+  .mc-big {
+    font-size: 46px; font-weight: 900;
+    color: var(--accent); opacity: 0.22;
+    line-height: 1; flex-shrink: 0;
+  }
+
+  .mc-tag {
+    font-size: 8.5px; letter-spacing: 3px;
+    color: var(--muted); font-weight: 700; margin-bottom: 5px;
+  }
+
+  .mc-ttl {
+    font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+    font-size: 15px; font-weight: 700; margin-bottom: 6px;
+  }
+
+  .mc-body {
+    font-size: 11.5px; color: #555;
+    line-height: 1.75; font-weight: 300;
+  }
+
+  .com-block {
+    background: var(--accent2);
+    color: #fff;
+    padding: 20px 26px;
+    display: flex; gap: 20px; align-items: center;
+    flex-shrink: 0;
+  }
+
+  .com-ico { font-size: 36px; flex-shrink: 0; }
+
+  .com-tag {
+    font-size: 8.5px; letter-spacing: 3px;
+    color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 5px;
+  }
+
+  .com-ttl {
+    font-family: 'Noto Serif CJK KR', 'Noto Serif KR', serif;
+    font-size: 17px; font-weight: 700; margin-bottom: 7px;
+  }
+
+  .com-body {
+    font-size: 11.5px; color: rgba(255,255,255,0.7);
+    line-height: 1.75; font-weight: 300;
+  }
+
+  /* footer */
+  .pfoot {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+  }
+
+  .pf-l {
+    display: flex; gap: 10px; align-items: center;
+    font-size: 10.5px; font-weight: 600; color: var(--muted);
+  }
+
+  .pf-l span { color: var(--accent); }
+  .pf-r { font-size: 9.5px; color: var(--border); letter-spacing: 0.5px; }
+
+  /* spacer that fills remaining vertical space */
+  .spacer { flex: 1; }
+
+  @media print {
+    body { margin: 0; }
+    .page { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-accent-bar"></div>
+    <div class="c-eyebrow">BUSINESS PROPOSAL · 2026</div>
+    <h1 class="c-title">잼테니스 <em>×</em><br>프로스포츠</h1>
+    <p class="c-subtitle">목동 테니스 생태계 통합 전략 제안서</p>
+    <div class="c-line"></div>
+    <p class="c-desc">레슨·연습부터 용품·장비까지, 두 브랜드의 강점을 연결해<br>지역 테니스 커뮤니티의 핵심 허브로 성장하기 위한 실행 전략입니다.</p>
+    <div class="c-badge">
+      <span class="c-badge-label">PRESENTED BY</span>
+      <div class="c-pills">
+        <span class="c-pill">JAM TENNIS</span>
+        <span class="c-pill">PRO SPORTS</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 1: 잼테니스 ===== -->
+<div class="page">
+  <div class="cp">
+
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">01 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">01</div>
+      <div>
+        <div class="sh-tag">INDOOR LESSON &amp; PRACTICE</div>
+        <div class="sh-title">잼테니스</div>
+        <div class="sh-sub">실내 레슨 및 연습장 — 차별화 운영 전략</div>
+      </div>
+    </div>
+
+    <div class="row3">
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">📱</span>
+          <span class="c3-ttl">디지털 케어 서비스</span>
+          <span class="badge">MZ 공략</span>
+        </div>
+        <div class="c3-body">강사가 직접 레슨 영상을 분석해 맞춤 피드백을 전송하는 디지털 케어 시스템을 도입합니다. 영상 기반 소통 방식은 MZ세대의 학습 습관과 맞닿아 있으며 레슨 질과 재등록률을 동시에 높입니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">✨</span>
+          <span class="c3-ttl">프리미엄 코트 관리</span>
+        </div>
+        <div class="c3-body">'방치 없는' 쾌적한 코트 상태와 철저한 청결 유지를 핵심 운영 원칙으로 삼습니다. 시설 관리 수준 자체가 브랜드 이미지를 결정하며 고객이 체감하는 프리미엄을 공간에서 직접 전달합니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">🎾</span>
+          <span class="c3-ttl">실전 연계 매치</span>
+        </div>
+        <div class="c3-body">레슨생을 대상으로 야외 코트 정기 매치를 주최합니다. 실내 레슨과 실전 경기를 연결함으로써 수강생의 만족도와 지속 참여 동기를 강화하고 커뮤니티 중심의 센터로 자리매김합니다.</div>
+      </div>
+    </div>
+
+    <div class="lc-wrap">
+      <div class="lc-head">
+        <span class="c3-ico">🌱</span>
+        <span class="lc-ttl">생애주기별 맞춤 레슨 프로그램</span>
+      </div>
+      <div class="lc-intro">연령과 경험 수준에 맞춘 세분화된 커리큘럼으로 생애 전 주기에 걸친 고객을 확보합니다.</div>
+      <div class="lc-row">
+        <div class="lc-item">
+          <div class="lc-label">JUNIOR</div>
+          <div class="lc-item-ttl">주니어 프로그램</div>
+          <div class="lc-desc">체험 레슨 후 6개월 등록 시 <strong>'생애 첫 라켓'</strong>을 선물합니다. 프로스포츠와 연계한 특별 혜택으로 초보 어린이 고객과 학부모의 유입을 유도합니다.</div>
+        </div>
+        <div class="lc-item">
+          <div class="lc-label">SENIOR</div>
+          <div class="lc-item-ttl">시니어 프로그램</div>
+          <div class="lc-desc">관절 보호를 중심에 둔 맞춤형 커리큘럼을 구성하고, 부담 없는 체험 레슨으로 첫 진입 장벽을 낮춥니다. 안전하고 즐거운 운동 경험을 설계합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: 프로스포츠 ===== -->
+<div class="page">
+  <div class="cp">
+
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">02 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">02</div>
+      <div>
+        <div class="sh-tag">EQUIPMENT &amp; STRING SHOP</div>
+        <div class="sh-title">프로스포츠</div>
+        <div class="sh-sub">용품 및 스트링샵 — 전문성 기반 오프라인 경쟁력 강화</div>
+      </div>
+    </div>
+
+    <div class="row3">
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">📊</span>
+          <span class="c3-ttl">전문 큐레이션 서비스</span>
+          <span class="badge">NEW</span>
+        </div>
+        <div class="c3-body">개인별 스윙 데이터를 기반으로 최적의 라켓을 추천하는 큐레이션 서비스를 도입합니다. 단순 판매를 넘어 '나에게 맞는 장비'를 제안하는 전문가 경험을 제공합니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">📱</span>
+          <span class="c3-ttl">퍼스널 스트링 앱</span>
+        </div>
+        <div class="c3-body">텐션 및 스트링 종류의 히스토리를 관리하고 개인에게 최적화된 세팅을 제안하는 전용 앱을 운영합니다. 지속적인 데이터 관계를 통해 충성도와 재방문율을 높입니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head">
+          <span class="c3-ico">🩺</span>
+          <span class="c3-ttl">장비 주치의 포지셔닝</span>
+        </div>
+        <div class="c3-body">온라인 최저가 공세에 맞서 오프라인만이 줄 수 있는 '장비 주치의' 이미지를 구축합니다. 전문 지식과 대면 신뢰를 경쟁력으로 삼아 가격이 아닌 가치로 승부합니다.</div>
+      </div>
+    </div>
+
+    <div class="vs-block">
+      <div class="vs-center">
+        <div class="vs-label">CORE VALUE</div>
+        <div class="vs-text">VS</div>
+      </div>
+      <div class="vs-col" style="border-right: 1px solid rgba(255,255,255,0.08); padding-right: 24px; margin-right: 4px;">
+        <div class="vs-col-label" style="color: rgba(255,255,255,0.28);">온라인 경쟁</div>
+        <div class="vs-col-body" style="color: rgba(255,255,255,0.45);">최저가 · 빠른 배송<br>표준화된 제품 나열</div>
+      </div>
+      <div class="vs-col">
+        <div class="vs-col-label" style="color: var(--accent);">프로스포츠 강점</div>
+        <div class="vs-col-body" style="color: rgba(255,255,255,0.85); font-weight: 500;">전문성 · 맞춤 추천<br>데이터 기반 신뢰 관계</div>
+      </div>
+    </div>
+
+    <div class="summary-block">
+      <div class="summary-tag">STRATEGY SUMMARY</div>
+      <div class="summary-body">스윙 데이터 기반의 큐레이션, 개인화된 스트링 관리 앱, 그리고 '장비 주치의' 브랜드 이미지를 통해 프로스포츠는 단순 용품점이 아닌 <strong>테니스 장비 전문 파트너</strong>로 포지셔닝합니다. 온라인 가격 경쟁에서 벗어나 오프라인만의 고유한 가치를 고객에게 제공합니다.</div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: 마케팅 전략 — 전문성 쇼핑 ===== -->
+<div class="page">
+  <div class="cp">
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">03 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">02</div>
+      <div>
+        <div class="sh-tag">PRO SPORTS MARKETING STRATEGY · 1/4</div>
+        <div class="sh-title">'상품'이 아닌 '전문성'을 쇼핑하게 하라</div>
+        <div class="sh-sub">대형몰과의 경쟁에서 이기는 방법 — 신뢰 기반의 큐레이션 전략</div>
+      </div>
+    </div>
+
+    <!-- 핵심 메시지 -->
+    <div style="background:var(--ink); padding:12px 18px; margin-bottom:10px; border-left:4px solid var(--accent); flex-shrink:0;">
+      <div style="font-size:9px; letter-spacing:3px; color:var(--accent); font-weight:700; margin-bottom:4px;">CORE MESSAGE</div>
+      <div style="font-size:12px; color:#fff; font-weight:500; line-height:1.6;">"구력이 1년 미만이고 엘보 통증이 고민인 동호인을 위한 추천 조합" — 구체적인 페르소나가 가격 비교를 멈추게 합니다.</div>
+    </div>
+
+    <!-- 2행 카드 -->
+    <div class="row3" style="margin-bottom:9px;">
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">🎯</span><span class="c3-ttl">페르소나 큐레이션 상세페이지</span></div>
+        <div class="c3-body">"이 라켓 좋습니다"가 아닌, 구체적인 플레이어 프로필을 공략하는 상세페이지를 구성합니다. 고객은 '내 이야기'라고 느끼는 순간 가격 비교를 멈추고 결제합니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">⚙️</span><span class="c3-ttl">맞춤형 튜닝 옵션</span><span class="badge">신규</span></div>
+        <div class="c3-body">라켓 구매 시 <strong>[엘보 방지용 스트링 조합]</strong> 또는 <strong>[공격형 플레이어용 무게 튜닝]</strong> 옵션을 제공합니다. 단품 판매에서 패키지 판매로 객단가를 높입니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">🎬</span><span class="c3-ttl">스트링 작업 전문성 시각화</span></div>
+        <div class="c3-body">전문 스트링거의 1:1 작업 과정, 무게 측정 샷, 고화질 실물 사진을 상세페이지에 노출합니다. 검수 과정의 정밀도를 보여주는 것만으로 신뢰도가 급상승합니다.</div>
+      </div>
+    </div>
+
+    <!-- 타겟팅 비교 -->
+    <div style="background:var(--white); border:1px solid var(--border); padding:12px 16px; margin-bottom:9px; flex-shrink:0;">
+      <div style="font-size:9px; font-weight:700; letter-spacing:3px; color:var(--muted); margin-bottom:8px;">타겟팅의 힘 — 좁힐수록 강해진다</div>
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1; background:#fdf5f5; border:1px solid #f0d0d0; border-left:3px solid #c0392b; padding:10px 12px;">
+          <div style="font-size:8px; font-weight:700; letter-spacing:2px; color:#c0392b; margin-bottom:5px;">❌ 나쁜 예</div>
+          <div style="font-size:11px; color:#555; line-height:1.6; font-weight:300;">"요넥스 이존(EZONE) 최저가 판매 중"<br><span style="font-size:9.5px; color:#aaa;">→ 대형몰에 밀립니다</span></div>
+        </div>
+        <div style="flex:1; background:var(--light-green); border:1px solid #c3ddc9; border-left:3px solid var(--accent2); padding:10px 12px;">
+          <div style="font-size:8px; font-weight:700; letter-spacing:2px; color:var(--accent2); margin-bottom:5px;">✅ 좋은 예</div>
+          <div style="font-size:11px; color:#3a5c42; line-height:1.6; font-weight:300;">"구력 1년, 엘보 통증 여성 동호인을 위한 맞춤 텐션 + 요넥스 이존 패키지"<br><span style="font-size:9.5px; color:#5a8c62;">→ 고객이 '내 이야기'라 느낍니다</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 시타 서비스 -->
+    <div style="background:var(--accent); padding:11px 16px; display:flex; gap:12px; align-items:center; flex-shrink:0;">
+      <div style="font-size:20px; flex-shrink:0;">🎾</div>
+      <div>
+        <div style="font-size:8.5px; font-weight:700; letter-spacing:3px; color:rgba(255,255,255,0.7); margin-bottom:3px;">TRIAL SERVICE</div>
+        <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:3px;">라켓 시타 서비스 · 렌탈 도입</div>
+        <div style="font-size:10.5px; color:rgba(255,255,255,0.85); font-weight:300; line-height:1.55;">온라인의 한계를 극복하기 위해 시타 라켓을 택배로 제공합니다. 시타 후 구매 시 렌탈비 차감 방식은 강력한 구매 전환 유인이 됩니다.</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: 마케팅 전략 — 신뢰 패키징 & 이원화 ===== -->
+<div class="page">
+  <div class="cp">
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">04 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">02</div>
+      <div>
+        <div class="sh-tag">PRO SPORTS MARKETING STRATEGY · 2/4</div>
+        <div class="sh-title">'신뢰'를 패키징하고, 채널을 이원화하라</div>
+        <div class="sh-sub">상세페이지 생동감 강화 + 스마트스토어·자사몰 이원화 전략</div>
+      </div>
+    </div>
+
+    <!-- 상세페이지 생동감 -->
+    <div style="font-size:9px; font-weight:700; letter-spacing:3.5px; color:var(--muted); margin-bottom:8px; flex-shrink:0;">상세페이지 '생동감' 강화</div>
+    <div class="row3" style="margin-bottom:10px;">
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">📸</span><span class="c3-ttl">실물 사진 & 무게 측정 샷</span></div>
+        <div class="c3-body">제조사 기본 이미지를 벗어나 실제 색감의 고화질 사진과 저울에 단 무게 측정 사진을 넣으세요. 오차 확인용 한 장이 구매 결정의 결정타가 됩니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">📦</span><span class="c3-ttl">언박싱 경험 설계</span></div>
+        <div class="c3-body">오버그립·보호 테이프를 정성스럽게 포장해 사은품으로 동봉하세요. "디테일이 다르다"는 후기가 쌓이면 입소문 마케팅이 완성됩니다.</div>
+      </div>
+      <div class="c3">
+        <div class="c3-head"><span class="c3-ico">📋</span><span class="c3-ttl">맞춤형 스트링 추천 리포트</span></div>
+        <div class="c3-body">구매 시 플레이 스타일 입력 → '맞춤형 스트링 & 텐션 추천 리포트' 동봉. 고객은 물건이 아닌 <strong>전문가의 컨설팅</strong>을 받았다고 느낍니다.</div>
+      </div>
+    </div>
+
+    <!-- 이원화 전략 -->
+    <div style="font-size:9px; font-weight:700; letter-spacing:3.5px; color:var(--muted); margin-bottom:8px; flex-shrink:0;">스마트스토어 × 자사몰 이원화 전략</div>
+    <div style="display:flex; gap:10px; margin-bottom:10px; flex-shrink:0;">
+      <div style="flex:1; background:var(--white); border:1px solid var(--border); border-top:3px solid #4a90d9; padding:13px 14px;">
+        <div style="font-size:8px; font-weight:700; letter-spacing:2px; color:#4a90d9; margin-bottom:5px;">SMARTSTORE</div>
+        <div style="font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:6px;">검색 유입의 '미끼 상품' 채널</div>
+        <div style="font-size:11px; color:#444; line-height:1.7; font-weight:300;">그립·볼·보호대 등 소모품을 최저가에 가깝게 배치해 신규 유입량을 극대화합니다. 소모품으로 들어온 고객이 라켓까지 탐색하게 만드는 퍼널을 설계합니다.</div>
+      </div>
+      <div style="flex:1; background:var(--ink); border-top:3px solid var(--accent); padding:13px 14px;">
+        <div style="font-size:8px; font-weight:700; letter-spacing:2px; color:var(--accent); margin-bottom:5px;">PRO TENNIS 자사몰</div>
+        <div style="font-size:12.5px; font-weight:700; color:#fff; margin-bottom:6px;">프리미엄 & 커스텀 전용 공간</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.65); line-height:1.7; font-weight:300;">고가 라켓·스트링 교체·커스텀 튜닝 중심으로 구성합니다. 자사몰 단독 사은품(로고 댐프너 등)으로 재방문과 충성 고객을 유도합니다.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--light-green); border:1px solid #c3ddc9; border-left:3px solid var(--accent2); padding:11px 16px; flex-shrink:0;">
+      <div style="font-size:8.5px; font-weight:700; letter-spacing:3px; color:var(--accent2); margin-bottom:4px;">핵심 원칙</div>
+      <div style="font-size:11px; color:#3a5c42; line-height:1.7; font-weight:300;">두 채널에 똑같은 상품을 올리는 것이 가장 큰 실수입니다. 스마트스토어는 유입을 늘리고, 자사몰은 수익성과 브랜드를 높이는 역할을 분명히 나눠야 합니다.</div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 5: 마케팅 전략 — SNS & 유입 ===== -->
+<div class="page">
+  <div class="cp">
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">05 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">02</div>
+      <div>
+        <div class="sh-tag">PRO SPORTS MARKETING STRATEGY · 3/4 & 4/4</div>
+        <div class="sh-title">SNS 채널 확장 & 미끼 상품 유입 전략</div>
+        <div class="sh-sub">검색 의존에서 벗어나 능동적 고객 유입 채널을 구축합니다</div>
+      </div>
+    </div>
+
+    <!-- SNS -->
+    <div style="font-size:9px; font-weight:700; letter-spacing:3.5px; color:var(--muted); margin-bottom:8px; flex-shrink:0;">마케팅 채널 확장 — SNS 활용</div>
+    <div class="row3" style="margin-bottom:10px;">
+      <div class="c3" style="border-top-color: #e1306c;">
+        <div class="c3-head"><span class="c3-ico">📸</span><span class="c3-ttl">인스타그램 / 유튜브 쇼츠</span></div>
+        <div class="c3-body">라켓의 타구음, 휘두르는 모습, 디자인 디테일을 15초 영상으로 보여줍니다. 숏폼 콘텐츠는 브랜드 인지도를 빠르게 높이는 가장 효율적인 채널입니다.</div>
+      </div>
+      <div class="c3" style="border-top-color: #27ae60;">
+        <div class="c3-head"><span class="c3-ico">💬</span><span class="c3-ttl">테니스 커뮤니티 활동</span></div>
+        <div class="c3-body">단순 광고 대신 장비 지식을 나누는 전문가로 활동합니다. 커뮤니티 신뢰가 쌓이면 프로스포츠 링크가 자연스럽게 퍼집니다.</div>
+      </div>
+      <div class="c3" style="border-top-color: var(--accent);">
+        <div class="c3-head"><span class="c3-ico">🔁</span><span class="c3-ttl">콘텐츠 → 구매 퍼널</span></div>
+        <div class="c3-body">SNS 콘텐츠에 자사몰 링크를 연결해 시청자가 자연스럽게 상품 페이지로 이동하도록 설계합니다.</div>
+      </div>
+    </div>
+
+    <!-- 미끼 상품 -->
+    <div style="font-size:9px; font-weight:700; letter-spacing:3.5px; color:var(--muted); margin-bottom:8px; flex-shrink:0;">유입을 만드는 '미끼 상품' 전략</div>
+    <div style="display:flex; gap:10px; margin-bottom:10px; flex-shrink:0;">
+      <div style="flex:1; background:var(--white); border:1px solid var(--border); border-left:3px solid var(--accent); padding:12px 14px;">
+        <div style="font-size:11px; font-weight:700; margin-bottom:5px;">🪝 소모품으로 유입, 라켓으로 전환</div>
+        <div style="font-size:11px; color:#444; line-height:1.7; font-weight:300;">그립, 댐프너 등 소모품을 매력적인 가격으로 배치해 유입량을 늘립니다. 소모품 구매 고객이 라켓 페이지까지 탐색하도록 내부 연동을 설계합니다.</div>
+      </div>
+      <div style="flex:1; background:var(--white); border:1px solid var(--border); border-left:3px solid var(--accent2); padding:12px 14px;">
+        <div style="font-size:11px; font-weight:700; margin-bottom:5px;">💡 검색 유입 최적화</div>
+        <div style="font-size:11px; color:#444; line-height:1.7; font-weight:300;">소모품의 네이버 쇼핑 최적화로 유입량을 확보하고, 이를 고관여 상품(라켓·튜닝)의 매출로 연결하는 퍼널을 구축합니다.</div>
+      </div>
+    </div>
+
+    <!-- 전략 요약 -->
+    <div style="background:var(--ink); padding:14px 18px; flex-shrink:0;">
+      <div style="font-size:9px; font-weight:700; letter-spacing:3px; color:var(--accent); margin-bottom:7px;">마케팅 전략 종합 로드맵</div>
+      <div style="display:flex; gap:16px;">
+        <div style="flex:1; border-right:1px solid rgba(255,255,255,0.08); padding-right:14px;">
+          <div style="font-size:9.5px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-weight:700;">단기 · 즉시 실행</div>
+          <div style="font-size:10.5px; color:rgba(255,255,255,0.72); line-height:1.65; font-weight:300;">페르소나 상세페이지 개편<br>실물·무게 측정 사진 추가<br>소모품 미끼 상품 배치</div>
+        </div>
+        <div style="flex:1; border-right:1px solid rgba(255,255,255,0.08); padding-right:14px;">
+          <div style="font-size:9.5px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-weight:700;">중기 · 1~3개월</div>
+          <div style="font-size:10.5px; color:rgba(255,255,255,0.72); line-height:1.65; font-weight:300;">시타 서비스·렌탈 도입<br>자사몰 / 스마트스토어 이원화<br>인스타·쇼츠 콘텐츠 시작</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:9.5px; color:rgba(255,255,255,0.4); margin-bottom:4px; font-weight:700;">장기 · 3개월+</div>
+          <div style="font-size:10.5px; color:rgba(255,255,255,0.72); line-height:1.65; font-weight:300;">커뮤니티 전문가 포지셔닝<br>스트링 리포트 시스템화<br>충성 고객 재구매 구조 완성</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 6(구 PAGE 3): 공동 연계 전략 ===== -->
+<div class="page">
+  <div class="cp">
+
+    <div class="topbar">
+      <span class="tb-brand">JAM TENNIS × PRO SPORTS · 사업 제안서</span>
+      <span class="tb-num">06 / 06</span>
+    </div>
+
+    <div class="sh">
+      <div class="sh-num">03</div>
+      <div>
+        <div class="sh-tag">JOINT STRATEGY</div>
+        <div class="sh-title">공동 연계 및 마케팅 전략</div>
+        <div class="sh-sub">두 브랜드의 시너지를 극대화하는 교차 혜택 설계</div>
+      </div>
+    </div>
+
+    <div class="xlabel">교차 혜택 프로그램</div>
+
+    <div class="row2">
+      <div class="sc">
+        <div class="sc-arrow">→</div>
+        <div class="sc-from">프로스포츠에서 라켓 구입 시</div>
+        <div class="sc-to">잼테니스 무인 이용권 3회 제공</div>
+        <div class="sc-note">실제 사용 후 구매 결정을 유도하는 체험 마케팅</div>
+      </div>
+      <div class="sc">
+        <div class="sc-arrow">→</div>
+        <div class="sc-from">잼테니스 레슨 등록 시</div>
+        <div class="sc-to">프로스포츠 스트링 1회 무료 또는<br>용품 할인권 제공</div>
+      </div>
+    </div>
+
+    <div class="mc-block">
+      <div class="mc-big">MC</div>
+      <div>
+        <div class="mc-tag">KNOWLEDGE MARKETING · 월 1회</div>
+        <div class="mc-ttl">라켓·스트링 마스터 클래스</div>
+        <div class="mc-body">프로스포츠 대표가 매달 한 차례 잼테니스 시설에서 장비 전문 클래스를 개최합니다. 고객에게는 실질적인 지식을, 두 브랜드에는 함께하는 전문가 이미지를 동시에 구축하는 지식 마케팅 전략입니다.</div>
+      </div>
+    </div>
+
+    <div class="com-block">
+      <div class="com-ico">🏆</div>
+      <div>
+        <div class="com-tag">LOCAL COMMUNITY · 공동 개최</div>
+        <div class="com-ttl">목동 테린이 챌린지</div>
+        <div class="com-body">두 브랜드가 공동으로 '목동 테린이 챌린지'를 기획·운영합니다. 지역 초보 테니스 인구를 타깃으로 한 이 이벤트는 브랜드 인지도를 지역 내에 확산시키고, 실질적인 신규 고객 유입 채널로 기능합니다. 커뮤니티 중심 마케팅으로 장기적인 팬층을 형성합니다.</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="pfoot">
+      <div class="pf-l"><span>잼테니스</span> × <span>프로스포츠</span></div>
+      <div class="pf-r">목동 테니스 생태계 통합 전략 제안서 · 2026</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
